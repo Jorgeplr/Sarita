@@ -1,6 +1,7 @@
 import { AudioProvider } from "./context/AudioContext";
 import Intro from "./sections/Intro";
 import Galeria from "./sections/Galeria";
+import RazonesYLoki from "./sections/RazonesYLoki";
 import BotonAudio from "./components/BotonAudio";
 
 export default function App() {
@@ -8,6 +9,7 @@ export default function App() {
     <AudioProvider>
       <Intro />
       <Galeria />
+      <RazonesYLoki />
       <BotonAudio />
     </AudioProvider>
   );
