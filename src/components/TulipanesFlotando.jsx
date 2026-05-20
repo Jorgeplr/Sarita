@@ -1,30 +1,32 @@
 import { motion } from "framer-motion";
-import { useMemo } from "react";
+import { useState } from "react";
 import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
+
+const cantidades = { baja: 3, media: 8, alta: 14 };
+
+function generar(cantidad) {
+  return Array.from({ length: cantidad }, (_, i) => ({
+    id: i,
+    left: Math.random() * 100,
+    delay: Math.random() * 6,
+    duration: 10 + Math.random() * 8,
+    size: 24 + Math.random() * 24,
+    rotateStart: Math.random() * 30 - 15,
+    rotateEnd: Math.random() * 30 - 15,
+  }));
+}
 
 export default function TulipanesFlotando({ densidad = "media" }) {
   const reduced = usePrefersReducedMotion();
-  const cantidades = { baja: 3, media: 8, alta: 14 };
-  const base = cantidades[densidad] ?? 8;
 
-  const isDesktop =
-    typeof window !== "undefined" &&
-    window.matchMedia("(min-width: 1024px)").matches;
-  const cantidad = isDesktop ? base : Math.ceil(base / 2);
-
-  const tulipanes = useMemo(
-    () =>
-      Array.from({ length: cantidad }, (_, i) => ({
-        id: i,
-        left: Math.random() * 100,
-        delay: Math.random() * 6,
-        duration: 10 + Math.random() * 8,
-        size: 24 + Math.random() * 24,
-        rotateStart: Math.random() * 30 - 15,
-        rotateEnd: Math.random() * 30 - 15,
-      })),
-    [cantidad]
-  );
+  const [tulipanes] = useState(() => {
+    const base = cantidades[densidad] ?? 8;
+    const isDesktop =
+      typeof window !== "undefined" &&
+      window.matchMedia("(min-width: 1024px)").matches;
+    const cantidad = isDesktop ? base : Math.ceil(base / 2);
+    return generar(cantidad);
+  });
 
   if (reduced) return null;
 

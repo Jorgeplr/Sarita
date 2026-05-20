@@ -1,29 +1,31 @@
 import { motion } from "framer-motion";
-import { useMemo } from "react";
+import { useState } from "react";
 import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
+
+const cantidades = { baja: 6, media: 12, alta: 20 };
+
+function generar(cantidad) {
+  return Array.from({ length: cantidad }, (_, i) => ({
+    id: i,
+    x: Math.random() * 100,
+    y: Math.random() * 100,
+    size: 4 + Math.random() * 8,
+    delay: Math.random() * 4,
+    duration: 3 + Math.random() * 3,
+  }));
+}
 
 export default function ParticulasLoki({ densidad = "media" }) {
   const reduced = usePrefersReducedMotion();
-  const cantidades = { baja: 6, media: 12, alta: 20 };
-  const base = cantidades[densidad] ?? 12;
 
-  const isDesktop =
-    typeof window !== "undefined" &&
-    window.matchMedia("(min-width: 1024px)").matches;
-  const cantidad = isDesktop ? base : Math.ceil(base / 2);
-
-  const particulas = useMemo(
-    () =>
-      Array.from({ length: cantidad }, (_, i) => ({
-        id: i,
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        size: 4 + Math.random() * 8,
-        delay: Math.random() * 4,
-        duration: 3 + Math.random() * 3,
-      })),
-    [cantidad]
-  );
+  const [particulas] = useState(() => {
+    const base = cantidades[densidad] ?? 12;
+    const isDesktop =
+      typeof window !== "undefined" &&
+      window.matchMedia("(min-width: 1024px)").matches;
+    const cantidad = isDesktop ? base : Math.ceil(base / 2);
+    return generar(cantidad);
+  });
 
   if (reduced) return null;
 

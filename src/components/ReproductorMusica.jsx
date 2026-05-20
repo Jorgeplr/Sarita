@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useAudio } from "../context/AudioContext";
+import { useAudio } from "../context/useAudio";
 
 function formatTime(s) {
   if (!isFinite(s)) return "0:00";

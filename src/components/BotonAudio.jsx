@@ -1,4 +1,4 @@
-import { useAudio } from "../context/AudioContext";
+import { useAudio } from "../context/useAudio";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function BotonAudio() {

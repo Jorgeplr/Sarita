@@ -7,13 +7,27 @@ import TulipanesFlotando from "../components/TulipanesFlotando";
 const MENSAJE_FINAL =
   "Genesis Sarahi, me gustas más de lo que sé decirte. Esta carta es solo el principio.";
 const MENSAJE_GRACIAS = "💚 Gracias por leer hasta el final. Tú haces todo más bonito.";
+const PARTICULAS_EXPLOSION = 30;
+
+function generarExplosion() {
+  return Array.from({ length: PARTICULAS_EXPLOSION }, (_, i) => {
+    const angle = (i / PARTICULAS_EXPLOSION) * Math.PI * 2;
+    const dist = 200 + Math.random() * 100;
+    return {
+      id: i,
+      x: Math.cos(angle) * dist,
+      y: Math.sin(angle) * dist,
+      emoji: i % 2 === 0 ? "💚" : "🌷",
+    };
+  });
+}
 
 export default function FinalYPlaylist() {
   const [revelado, setRevelado] = useState(false);
-  const [explosion, setExplosion] = useState(false);
+  const [explosion, setExplosion] = useState(null);
 
   const onRevelar = () => {
-    setExplosion(true);
+    setExplosion(generarExplosion());
     setTimeout(() => setRevelado(true), 600);
   };
 
@@ -47,26 +61,17 @@ export default function FinalYPlaylist() {
         <AnimatePresence>
           {explosion && (
             <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-              {Array.from({ length: 30 }).map((_, i) => {
-                const angle = (i / 30) * Math.PI * 2;
-                const dist = 200 + Math.random() * 100;
-                return (
-                  <motion.span
-                    key={i}
-                    initial={{ x: 0, y: 0, opacity: 1, scale: 0.5 }}
-                    animate={{
-                      x: Math.cos(angle) * dist,
-                      y: Math.sin(angle) * dist,
-                      opacity: 0,
-                      scale: 1.5,
-                    }}
-                    transition={{ duration: 1.5, ease: "easeOut" }}
-                    className="absolute text-3xl"
-                  >
-                    {i % 2 === 0 ? "💚" : "🌷"}
-                  </motion.span>
-                );
-              })}
+              {explosion.map((p) => (
+                <motion.span
+                  key={p.id}
+                  initial={{ x: 0, y: 0, opacity: 1, scale: 0.5 }}
+                  animate={{ x: p.x, y: p.y, opacity: 0, scale: 1.5 }}
+                  transition={{ duration: 1.5, ease: "easeOut" }}
+                  className="absolute text-3xl"
+                >
+                  {p.emoji}
+                </motion.span>
+              ))}
             </div>
           )}
         </AnimatePresence>

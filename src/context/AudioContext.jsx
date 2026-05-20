@@ -1,7 +1,6 @@
-import { createContext, useContext, useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useAudioPlayer } from "../hooks/useAudioPlayer";
-
-const AudioCtx = createContext(null);
+import { AudioCtx } from "./audio-context-object";
 
 const FONDO_SRC = "/assets/musica/fondo.mp3";
 
@@ -50,10 +49,4 @@ export function AudioProvider({ children }) {
       {children}
     </AudioCtx.Provider>
   );
-}
-
-export function useAudio() {
-  const ctx = useContext(AudioCtx);
-  if (!ctx) throw new Error("useAudio debe usarse dentro de AudioProvider");
-  return ctx;
 }

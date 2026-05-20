@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useAudio } from "../context/AudioContext";
+import { useAudio } from "../context/useAudio";
 import TulipanesFlotando from "../components/TulipanesFlotando";
 
 const NOMBRE = "Genesis Sarahi";
