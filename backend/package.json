@@ -9,6 +9,8 @@
     "test": "bun test",
     "test:unit": "bun test tests/unit",
     "test:integration": "bun test tests/integration",
+    "test:db:start": "docker run -d --rm --name carta-test-pg -e POSTGRES_PASSWORD=dev -e POSTGRES_USER=carta -e POSTGRES_DB=carta_test -p 5434:5432 postgres:16-alpine",
+    "test:db:stop": "docker stop carta-test-pg",
     "db:generate": "bunx drizzle-kit generate",
     "db:migrate": "bunx drizzle-kit migrate",
     "db:studio": "bunx drizzle-kit studio"
@@ -26,8 +28,6 @@
     "drizzle-kit": "^0.28.0",
     "typescript": "^5.5.0",
     "@types/bun": "latest",
-    "@types/ua-parser-js": "^0.7.0",
-    "testcontainers": "^10.13.0",
-    "@testcontainers/postgresql": "^10.13.0"
+    "@types/ua-parser-js": "^0.7.0"
   }
 }
