@@ -3,6 +3,7 @@ import { useState } from "react";
 import { playlist } from "../data/playlist";
 import ReproductorMusica from "../components/ReproductorMusica";
 import TulipanesFlotando from "../components/TulipanesFlotando";
+import { enviarRespuesta, getOrCreateVisitorUuid } from "../lib/api";
 
 const MENSAJE_FINAL =
   "Genesis Sarahi, me gustas más de lo que sé decirte. Esta carta es solo el principio.";
@@ -27,6 +28,7 @@ export default function FinalYPlaylist() {
   const [explosion, setExplosion] = useState(null);
 
   const onRevelar = () => {
+    enviarRespuesta(getOrCreateVisitorUuid());
     setExplosion(generarExplosion());
     setTimeout(() => setRevelado(true), 600);
   };
