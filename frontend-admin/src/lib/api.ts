@@ -4,6 +4,7 @@ async function request<T>(method: string, path: string, body?: unknown): Promise
   const init: RequestInit = {
     method,
     credentials: "include",
+    cache: "no-store",
     headers: body ? { "Content-Type": "application/json" } : {},
     body: body ? JSON.stringify(body) : undefined,
   };

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import SortableList from "../components/SortableList";
 import { api } from "../lib/api";
+import EmojiPicker, { Theme } from "emoji-picker-react";
 
 interface Cualidad {
   id: string;
@@ -16,6 +17,8 @@ export default function Cualidades() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editIcon, setEditIcon] = useState("");
   const [editText, setEditText] = useState("");
+  const [showPicker, setShowPicker] = useState(false);
+  const [showEditPicker, setShowEditPicker] = useState(false);
 
   const query = useQuery({
     queryKey: ["content", "cualidades"],
@@ -62,6 +65,7 @@ export default function Cualidades() {
     setEditingId(null);
     setEditIcon("");
     setEditText("");
+    setShowEditPicker(false);
   };
 
   const saveEdit = async () => {
@@ -74,13 +78,26 @@ export default function Cualidades() {
     <div className="space-y-6">
       <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur">
         <div className="text-sm text-mist/60 uppercase tracking-wide mb-3">Nueva cualidad</div>
-        <div className="flex flex-wrap gap-3">
-          <input
-            value={icon}
-            onChange={(e) => setIcon(e.target.value)}
-            placeholder="Emoji"
-            className="w-24 rounded-lg border border-white/10 bg-ink/60 px-3 py-2 text-mist"
-          />
+        <div className="flex flex-wrap gap-3 relative">
+          <div className="relative">
+            <button
+              onClick={() => setShowPicker(!showPicker)}
+              className="w-16 h-[42px] flex items-center justify-center rounded-lg border border-white/10 bg-ink/60 text-mist text-xl hover:bg-ink/80 transition-colors"
+            >
+              {icon || "🙂"}
+            </button>
+            {showPicker && (
+              <div className="absolute top-12 left-0 z-50 shadow-xl">
+                <EmojiPicker
+                  theme={Theme.DARK}
+                  onEmojiClick={(e) => {
+                    setIcon(e.emoji);
+                    setShowPicker(false);
+                  }}
+                />
+              </div>
+            )}
+          </div>
           <input
             value={text}
             onChange={(e) => setText(e.target.value)}
@@ -102,12 +119,26 @@ export default function Cualidades() {
         renderItem={(item) => (
           <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur flex items-center justify-between">
             {editingId === item.id ? (
-              <div className="flex flex-1 flex-wrap gap-3 items-center">
-                <input
-                  value={editIcon}
-                  onChange={(e) => setEditIcon(e.target.value)}
-                  className="w-20 rounded-lg border border-white/10 bg-ink/60 px-3 py-2 text-mist"
-                />
+              <div className="flex flex-1 flex-wrap gap-3 items-center relative">
+                <div className="relative">
+                  <button
+                    onClick={() => setShowEditPicker(!showEditPicker)}
+                    className="w-16 h-[42px] flex items-center justify-center rounded-lg border border-white/10 bg-ink/60 text-mist text-xl hover:bg-ink/80 transition-colors"
+                  >
+                    {editIcon || "🙂"}
+                  </button>
+                  {showEditPicker && (
+                    <div className="absolute top-12 left-0 z-50 shadow-xl">
+                      <EmojiPicker
+                        theme={Theme.DARK}
+                        onEmojiClick={(e) => {
+                          setEditIcon(e.emoji);
+                          setShowEditPicker(false);
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
                 <input
                   value={editText}
                   onChange={(e) => setEditText(e.target.value)}
