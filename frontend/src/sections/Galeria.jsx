@@ -4,12 +4,14 @@ import FotoCard from "../components/FotoCard";
 import TulipanesFlotando from "../components/TulipanesFlotando";
 
 function SkeletonGaleria() {
+  const heights = [320, 420, 360, 480, 300, 400, 380, 460, 340];
   return (
-    <div className="relative z-10 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {Array.from({ length: 9 }).map((_, i) => (
+    <div className="relative z-10 max-w-6xl mx-auto columns-1 md:columns-2 lg:columns-3 gap-6">
+      {heights.map((h, i) => (
         <div
           key={i}
-          className="aspect-[2/3] rounded-lg bg-verde-loki/30 animate-pulse"
+          className="mb-6 break-inside-avoid rounded-2xl bg-verde-loki/30 animate-pulse"
+          style={{ height: h }}
         />
       ))}
     </div>
@@ -37,12 +39,12 @@ export default function Galeria() {
       {loading ? (
         <SkeletonGaleria />
       ) : (
-        <div className="relative z-10 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="relative z-10 max-w-6xl mx-auto columns-1 md:columns-2 lg:columns-3 gap-6">
           {fotos.map((foto, i) => (
             <FotoCard
               key={foto.id ?? i}
               index={i}
-              src={foto.thumbUrl || foto.url}
+              src={foto.url || foto.thumbUrl}
               caption={foto.caption}
             />
           ))}
