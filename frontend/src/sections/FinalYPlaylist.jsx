@@ -4,6 +4,7 @@ import { useContent } from "../lib/useContent";
 import ReproductorMusica from "../components/ReproductorMusica";
 import TulipanesFlotando from "../components/TulipanesFlotando";
 import { enviarRespuesta, getOrCreateVisitorUuid } from "../lib/api";
+import { localPlaylist } from "../data/playlist";
 
 const MENSAJE_FINAL =
   "Genesis Sarahi, me gustas más de lo que sé decirte. Esta carta es solo el principio.";
@@ -27,7 +28,8 @@ export default function FinalYPlaylist() {
   const [revelado, setRevelado] = useState(false);
   const [explosion, setExplosion] = useState(null);
   const { data, loading } = useContent("playlist");
-  const playlist = Array.isArray(data) ? data : [];
+  const apiPlaylist = Array.isArray(data) ? data : [];
+  const playlist = apiPlaylist.length > 0 ? apiPlaylist : localPlaylist;
 
   const onRevelar = () => {
     enviarRespuesta(getOrCreateVisitorUuid());

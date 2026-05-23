@@ -1,14 +1,18 @@
-export const playlist = [
+const LOCAL_SONG_PATH = "/assets/musica/Gone, Gone, Gone Sub Español HD - (256 Kbps).mp3";
+
+export const localFondo = {
+  id: "local-fondo",
+  url: encodeURI(LOCAL_SONG_PATH),
+  title: "Gone, Gone, Gone",
+  artist: "Phillip Phillips",
+};
+
+export const localPlaylist = [
   {
-    src: "/assets/musica/playlist-1.mp3",
-    titulo: "Canción 1 — placeholder",
-    artista: "Artista 1",
-    cover: "/assets/decoraciones/cover-placeholder.svg",
-  },
-  {
-    src: "/assets/musica/playlist-2.mp3",
-    titulo: "Canción 2 — placeholder",
-    artista: "Artista 2",
+    id: "local-1",
+    url: encodeURI(LOCAL_SONG_PATH),
+    title: "Gone, Gone, Gone",
+    artist: "Phillip Phillips",
     cover: "/assets/decoraciones/cover-placeholder.svg",
   },
 ];

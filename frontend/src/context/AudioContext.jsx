@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { useAudioPlayer } from "../hooks/useAudioPlayer";
 import { AudioCtx } from "./audio-context-object";
 import { useContent } from "../lib/useContent";
+import { localFondo } from "../data/playlist";
 
 const FONDO_VOLUME = 0.3;
 const FONDO_FADE_IN_MS = 1500;
@@ -9,7 +10,7 @@ const FONDO_PAUSE_FADE_MS = 250;
 
 export function AudioProvider({ children }) {
   const { data: fondoData } = useContent("fondo");
-  const fondoSrc = fondoData?.url ?? null;
+  const fondoSrc = fondoData?.url ?? localFondo.url;
   const fondo = useAudioPlayer(fondoSrc, { loop: true, initialVolume: 0 });
   const [muted, setMuted] = useState(false);
   const [iniciado, setIniciado] = useState(false);
