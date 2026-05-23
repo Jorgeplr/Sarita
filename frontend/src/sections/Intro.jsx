@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useAudio } from "../context/useAudio";
 import TulipanesFlotando from "../components/TulipanesFlotando";
 
-const NOMBRE = "Genesis Sarahi";
+const NOMBRE = "Génesis Sarahí";
 
 const letras = {
   hidden: { opacity: 0 },

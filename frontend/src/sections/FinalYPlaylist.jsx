@@ -7,7 +7,7 @@ import { enviarRespuesta, getOrCreateVisitorUuid } from "../lib/api";
 import { localPlaylist } from "../data/playlist";
 
 const MENSAJE_FINAL =
-  "Genesis Sarahi, me gustas más de lo que sé decirte. Esta carta es solo el principio.";
+  "Génesis Sarahí, me gustas más de lo que sé decirte. Esta carta es solo el principio.";
 const MENSAJE_GRACIAS = "💚 Gracias por responder. Esto solo es el principio.";
 const PARTICULAS_EXPLOSION = 30;
 

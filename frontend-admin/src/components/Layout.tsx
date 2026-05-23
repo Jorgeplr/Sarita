@@ -34,7 +34,7 @@ export default function Layout() {
   return (
     <div className="min-h-screen flex">
       <aside className="hidden md:flex w-60 flex-col border-r border-white/10 bg-ink/80 backdrop-blur p-6">
-        <div className="text-lg font-semibold text-mist mb-6">Carta Genesis</div>
+        <div className="text-lg font-semibold text-mist mb-6">Carta Génesis</div>
         <nav className="space-y-2">
           {navItems.map((item) => (
             <NavItem key={item.to} to={item.to} label={item.label} />
@@ -46,7 +46,7 @@ export default function Layout() {
         <div className="fixed inset-0 z-40 bg-ink/80 backdrop-blur md:hidden">
           <div className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <div className="text-lg font-semibold text-mist">Carta Genesis</div>
+              <div className="text-lg font-semibold text-mist">Carta Génesis</div>
               <button
                 onClick={() => setOpen(false)}
                 className="text-mist/80 hover:text-mist"

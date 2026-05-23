@@ -1,4 +1,4 @@
-# Carta para Genesis Sarahi 💚
+# Carta para Génesis Sarahí 💚
 
 Sitio web personal de scroll narrativo construido con React + Vite + Framer Motion + Tailwind.
 

@@ -1,4 +1,4 @@
-# Carta Genesis — Monorepo
+# Carta Génesis — Monorepo
 
 Sitio web personal + backend con analytics y registro de respuesta.
 
