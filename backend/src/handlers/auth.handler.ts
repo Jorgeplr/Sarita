@@ -21,10 +21,14 @@ const changeSchema = z.object({
 const THIRTY_DAYS_SECONDS = 30 * 24 * 60 * 60;
 const THIRTY_DAYS_MS = THIRTY_DAYS_SECONDS * 1000;
 
+function isSecureOrigin(env: Env): boolean {
+  return env.ADMIN_ORIGIN.startsWith("https://");
+}
+
 function setSessionCookie(c: Context, env: Env, sid: string) {
   setCookie(c, "sid", sid, {
     httpOnly: true,
-    secure: env.NODE_ENV === "production",
+    secure: isSecureOrigin(env),
     sameSite: "Lax",
     path: "/",
     maxAge: THIRTY_DAYS_SECONDS,
@@ -34,7 +38,7 @@ function setSessionCookie(c: Context, env: Env, sid: string) {
 function clearSessionCookie(c: Context, env: Env) {
   setCookie(c, "sid", "", {
     httpOnly: true,
-    secure: env.NODE_ENV === "production",
+    secure: isSecureOrigin(env),
     sameSite: "Lax",
     path: "/",
     maxAge: 0,
