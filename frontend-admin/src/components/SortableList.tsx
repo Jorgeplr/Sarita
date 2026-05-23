@@ -16,8 +16,16 @@ function SortableItem({ id, children }: SortableItemProps) {
   };
 
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      {children}
+    <div ref={setNodeRef} style={style} {...attributes} className="flex items-center gap-2">
+      <button
+        type="button"
+        {...listeners}
+        className="cursor-grab active:cursor-grabbing touch-none shrink-0 p-1 text-mist/40 hover:text-mist/70"
+        aria-label="Drag to reorder"
+      >
+        ⠿
+      </button>
+      <div className="flex-1 min-w-0">{children}</div>
     </div>
   );
 }
@@ -36,7 +44,11 @@ export default function SortableList<T extends { id: string }>({
   const [localItems, setLocalItems] = useState(items);
   useEffect(() => setLocalItems(items), [items]);
 
-  const sensors = useSensors(useSensor(PointerSensor));
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 8 },
+    })
+  );
   const ids = useMemo(() => localItems.map((item) => item.id), [localItems]);
 
   return (
