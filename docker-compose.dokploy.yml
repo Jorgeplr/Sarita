@@ -1,0 +1,67 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: carta
+      POSTGRES_USER: carta
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U carta -d carta"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+    environment:
+      DATABASE_URL: postgres://carta:${POSTGRES_PASSWORD}@db:5432/carta
+      IP_HASH_SALT: ${IP_HASH_SALT}
+      ADMIN_TOKEN: ${ADMIN_TOKEN}
+      FRONTEND_ORIGIN: ${FRONTEND_ORIGIN}
+      ADMIN_ORIGIN: ${ADMIN_ORIGIN}
+      ADMIN_USERNAME: ${ADMIN_USERNAME}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      NODE_ENV: production
+      PORT: 3000
+    volumes:
+      - media_data:/app/media
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+    expose:
+      - "80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - default
+      - dokploy-network
+
+  frontend-admin:
+    build:
+      context: ./frontend-admin
+    expose:
+      - "80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - default
+      - dokploy-network
+
+volumes:
+  postgres_data:
+  media_data:
+
+networks:
+  dokploy-network:
+    external: true
