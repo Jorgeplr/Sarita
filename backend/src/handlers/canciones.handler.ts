@@ -17,8 +17,16 @@ const reorderSchema = z.object({
   orderedIds: z.array(z.string().uuid()).min(1),
 });
 
-function isValidAudioType(type: string) {
-  return type === "audio/mpeg" || type === "audio/mp3";
+const AUDIO_EXTENSIONS: Record<string, string> = {
+  "audio/mpeg": "mp3",
+  "audio/mp3": "mp3",
+  "audio/mp4": "m4a",
+  "audio/x-m4a": "m4a",
+  "audio/aac": "m4a",
+};
+
+function audioExtension(type: string): string | null {
+  return AUDIO_EXTENSIONS[type] ?? null;
 }
 
 async function ensureSingleFondo(db: DB, excludeId?: string) {
@@ -53,7 +61,8 @@ export async function uploadCancionHandler(c: Context, db: DB) {
     return c.json({ error: "Missing file", code: "MISSING_FILE" }, 400);
   }
 
-  if (!isValidAudioType(file.type)) {
+  const extension = audioExtension(file.type);
+  if (!extension) {
     return c.json({ error: "Invalid file type", code: "INVALID_FILE" }, 400);
   }
 
@@ -68,8 +77,8 @@ export async function uploadCancionHandler(c: Context, db: DB) {
   }).parse({ title, artist, kind });
 
   const buffer = Buffer.from(await file.arrayBuffer());
-  const fileId = crypto.randomUUID();
-  await saveCancion(fileId, buffer);
+  const filename = `${crypto.randomUUID()}.${extension}`;
+  await saveCancion(filename, buffer);
 
   if (parsed.kind === "fondo") {
     await ensureSingleFondo(db);
@@ -85,7 +94,7 @@ export async function uploadCancionHandler(c: Context, db: DB) {
     .insert(canciones)
     .values({
       kind: parsed.kind,
-      filename: `${fileId}.mp3`,
+      filename,
       title: parsed.title,
       artist: parsed.artist,
       sortOrder: parsed.kind === "playlist" ? nextOrder : 0,

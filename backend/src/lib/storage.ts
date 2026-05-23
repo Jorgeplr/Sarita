@@ -12,8 +12,8 @@ export async function saveFoto(uuid: string, main: Buffer, thumb: Buffer) {
   await Bun.write(`${MEDIA_ROOT}/fotos/${uuid}.thumb.webp`, thumb);
 }
 
-export async function saveCancion(uuid: string, file: Buffer) {
-  await Bun.write(`${MEDIA_ROOT}/musica/${uuid}.mp3`, file);
+export async function saveCancion(filename: string, file: Buffer) {
+  await Bun.write(`${MEDIA_ROOT}/musica/${filename}`, file);
 }
 
 export async function deleteFoto(filename: string, thumbFilename: string) {
