@@ -1,4 +1,4 @@
-import { pgEnum, pgTable, uuid, timestamp, text, index, integer } from "drizzle-orm/pg-core";
+import { pgEnum, pgTable, uuid, timestamp, text, index, integer, boolean } from "drizzle-orm/pg-core";
 
 export const visits = pgTable(
   "visits",
@@ -31,6 +31,9 @@ export const responses = pgTable(
     device: text("device"),
     browser: text("browser"),
     os: text("os"),
+    opinion: text("opinion"),
+    teEncanto: boolean("te_encanto"),
+    salida: text("salida"),
   },
   (t) => ({
     respondedAtIdx: index("idx_responses_responded_at").on(t.respondedAt.desc()),

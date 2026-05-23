@@ -24,6 +24,9 @@ export async function statsHandler(c: Context, db: DB) {
       device: responses.device,
       browser: responses.browser,
       os: responses.os,
+      opinion: responses.opinion,
+      teEncanto: responses.teEncanto,
+      salida: responses.salida,
     })
     .from(responses)
     .orderBy(desc(responses.respondedAt))

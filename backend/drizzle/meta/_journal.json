@@ -15,6 +15,13 @@
       "when": 1780000000000,
       "tag": "0001_admin_panel",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1780500000000,
+      "tag": "0002_feedback_fields",
+      "breakpoints": true
     }
   ]
 }

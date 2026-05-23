@@ -17,14 +17,16 @@ export async function logVisit() {
   }
 }
 
-export async function enviarRespuesta(visitorUuid) {
+export async function enviarRespuesta(visitorUuid, extra = {}) {
   try {
-    await fetch(`${API}/respuesta`, {
+    const res = await fetch(`${API}/respuesta`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ visitorUuid }),
+      body: JSON.stringify({ visitorUuid, ...extra }),
     });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return true;
   } catch {
-    // silent
+    return false;
   }
 }
