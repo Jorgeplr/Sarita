@@ -1,5 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useAudio } from "../context/useAudio";
+
+const PLAYLIST_VOLUME = 0.85;
 
 function formatTime(s) {
   if (!isFinite(s)) return "0:00";
@@ -13,20 +15,28 @@ function formatTime(s) {
 const FALLBACK_COVER = "/assets/decoraciones/cover-placeholder.svg";
 
 export default function ReproductorMusica({ canciones }) {
-  const { pausarFondoParaPlaylist, reanudarFondo } = useAudio();
+  const { registerPlaylistAudio } = useAudio();
   const [activa, setActiva] = useState(null);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const audioRef = useRef(null);
-  const items = Array.isArray(canciones) ? canciones : [];
+  const items = useMemo(
+    () => (Array.isArray(canciones) ? canciones : []),
+    [canciones]
+  );
 
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.pause();
+      audioRef.current.src = "";
       audioRef.current = null;
     }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setProgress(0);
+    setDuration(0);
+
     if (activa === null) {
-      reanudarFondo();
+      registerPlaylistAudio(null);
       return;
     }
     const current = items[activa];
@@ -35,9 +45,10 @@ export default function ReproductorMusica({ canciones }) {
       setActiva(null);
       return;
     }
-    const audio = new Audio(src);
-    audio.volume = 0.6;
-    audio.preload = "metadata";
+    const audio = new Audio();
+    audio.preload = "auto";
+    audio.volume = PLAYLIST_VOLUME;
+    audio.src = src;
     audioRef.current = audio;
 
     const onTime = () => setProgress(audio.currentTime);
@@ -48,16 +59,17 @@ export default function ReproductorMusica({ canciones }) {
     audio.addEventListener("loadedmetadata", onLoaded);
     audio.addEventListener("ended", onEnded);
 
-    pausarFondoParaPlaylist();
+    registerPlaylistAudio(audio);
     audio.play().catch(() => {});
 
     return () => {
       audio.pause();
+      audio.src = "";
       audio.removeEventListener("timeupdate", onTime);
       audio.removeEventListener("loadedmetadata", onLoaded);
       audio.removeEventListener("ended", onEnded);
     };
-  }, [activa, items, pausarFondoParaPlaylist, reanudarFondo]);
+  }, [activa, items, registerPlaylistAudio]);
 
   const togglePlay = (i) => setActiva((cur) => (cur === i ? null : i));
 

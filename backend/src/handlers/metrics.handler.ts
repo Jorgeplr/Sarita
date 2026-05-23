@@ -22,7 +22,7 @@ export async function visitsPerDayHandler(c: Context, db: DB) {
       uniqueVisitors: sql<number>`count(distinct ${visits.ipHash})::int`,
     })
     .from(visits)
-    .where(sql`${visits.visitedAt} >= ${since}`)
+    .where(sql`${visits.visitedAt} >= ${since.toISOString()}`)
     .groupBy(sql`date_trunc('day', ${visits.visitedAt})`)
     .orderBy(sql`date_trunc('day', ${visits.visitedAt})`);
 

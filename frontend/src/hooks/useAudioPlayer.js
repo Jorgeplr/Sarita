@@ -2,24 +2,26 @@ import { useEffect, useRef, useState } from "react";
 
 export function useAudioPlayer(src, { loop = false, initialVolume = 0.5 } = {}) {
   const audioRef = useRef(null);
+  const fadeRafRef = useRef(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(initialVolume);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
 
   useEffect(() => {
     if (!src) {
       audioRef.current = null;
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsPlaying(false);
       setProgress(0);
       setDuration(0);
       return;
     }
 
-    const audio = new Audio(src);
+    const audio = new Audio();
     audio.loop = loop;
     audio.volume = initialVolume;
-    audio.preload = "metadata";
+    audio.preload = "auto";
+    audio.src = src;
     audioRef.current = audio;
 
     const onTimeUpdate = () => setProgress(audio.currentTime);
@@ -33,17 +35,15 @@ export function useAudioPlayer(src, { loop = false, initialVolume = 0.5 } = {}) 
     audio.addEventListener("ended", onEnded);
 
     return () => {
+      cancelAnimationFrame(fadeRafRef.current);
       audio.pause();
       audio.removeEventListener("timeupdate", onTimeUpdate);
       audio.removeEventListener("loadedmetadata", onLoaded);
       audio.removeEventListener("ended", onEnded);
+      audio.src = "";
       audioRef.current = null;
     };
   }, [src, loop, initialVolume]);
-
-  useEffect(() => {
-    if (audioRef.current) audioRef.current.volume = volume;
-  }, [volume]);
 
   const play = () => {
     if (!audioRef.current) return;
@@ -58,19 +58,29 @@ export function useAudioPlayer(src, { loop = false, initialVolume = 0.5 } = {}) 
 
   const toggle = () => (isPlaying ? pause() : play());
 
+  const setVolume = (v) => {
+    if (audioRef.current) audioRef.current.volume = v;
+  };
+
+  const setMuted = (m) => {
+    if (audioRef.current) audioRef.current.muted = m;
+  };
+
   const fadeTo = (target, ms = 1000) => {
     if (!audioRef.current) return;
+    cancelAnimationFrame(fadeRafRef.current);
     const start = audioRef.current.volume;
     const startTime = performance.now();
     const step = (now) => {
+      if (!audioRef.current) return;
       const t = Math.min(1, (now - startTime) / ms);
-      const v = start + (target - start) * t;
-      if (audioRef.current) audioRef.current.volume = v;
-      setVolume(v);
-      if (t < 1) requestAnimationFrame(step);
+      audioRef.current.volume = start + (target - start) * t;
+      if (t < 1) {
+        fadeRafRef.current = requestAnimationFrame(step);
+      }
     };
-    requestAnimationFrame(step);
+    fadeRafRef.current = requestAnimationFrame(step);
   };
 
-  return { isPlaying, play, pause, toggle, volume, setVolume, fadeTo, progress, duration };
+  return { isPlaying, play, pause, toggle, setVolume, setMuted, fadeTo, progress, duration };
 }
