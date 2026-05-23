@@ -22,8 +22,13 @@ services:
       IP_HASH_SALT: ${IP_HASH_SALT}
       ADMIN_TOKEN: ${ADMIN_TOKEN}
       FRONTEND_ORIGIN: ${FRONTEND_ORIGIN:-http://localhost}
+      ADMIN_ORIGIN: ${ADMIN_ORIGIN:-http://localhost:8080}
+      ADMIN_USERNAME: ${ADMIN_USERNAME}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
       NODE_ENV: production
       PORT: 3000
+    volumes:
+      - media_data:/app/media
     depends_on:
       db:
         condition: service_healthy
@@ -38,5 +43,15 @@ services:
       - backend
     restart: unless-stopped
 
+  frontend-admin:
+    build:
+      context: ./frontend-admin
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
 volumes:
   postgres_data:
+  media_data:

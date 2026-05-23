@@ -1,9 +1,7 @@
 export const cualidades = [
-  { icono: "💚", texto: "Tu forma de reír ilumina cualquier día gris." },
-  { icono: "🌷", texto: "Cuidas los detalles como nadie más." },
-  { icono: "✨", texto: "Tu mirada cuenta historias que aún quiero escuchar." },
-  { icono: "🌿", texto: "Eres calma en medio del ruido." },
-  { icono: "💫", texto: "Hay magia en como caminas por la vida." },
-  { icono: "🍃", texto: "Tu voz se siente como volver a casa." },
-  { icono: "🌹", texto: "Eres todo lo que no sabía que estaba buscando." },
+  { icono: "💚", texto: "Tu forma der ser conmigo, como fuiste deste el inicio y lo linda que eres." },
+  { icono: "🌷", texto: "Me gusta mucho que me envies fotos a diario, creeme que me alegra mucho el dia." },
+  { icono: "✨", texto: "Tu mirada me cautiva mucho, siento que puedo estar sentado y escucharte hablar por horas." },
+  { icono: "🍃", texto: "Tu voz es es linda y se siente lindo como te expresas." },
+  { icono: "🌹", texto: "Pensar que te conozco poco tiempo, y sentir tanta comodidad, es lindo y me da mucha calma." },
 ];

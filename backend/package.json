@@ -22,7 +22,8 @@
     "zod": "^3.23.0",
     "pino": "^9.0.0",
     "pino-pretty": "^11.0.0",
-    "ua-parser-js": "^2.0.0"
+    "ua-parser-js": "^2.0.0",
+    "sharp": "^0.33.4"
   },
   "devDependencies": {
     "drizzle-kit": "^0.28.0",

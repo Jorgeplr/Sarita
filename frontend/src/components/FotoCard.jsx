@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 
-export default function FotoCard({ src, alt, texto, index }) {
+export default function FotoCard({ src, alt, texto, caption, index }) {
   const [hover, setHover] = useState(false);
+  const overlayText = texto ?? caption;
+  const safeAlt = alt || overlayText || "Foto";
 
   return (
     <motion.div
@@ -18,19 +20,19 @@ export default function FotoCard({ src, alt, texto, index }) {
     >
       <img
         src={src}
-        alt={alt}
+        alt={safeAlt}
         loading="lazy"
         decoding="async"
         className="w-full h-auto block"
       />
-      {texto && (
+      {overlayText && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: hover ? 1 : 0 }}
           transition={{ duration: 0.3 }}
           className="absolute inset-0 flex items-end p-4 bg-gradient-to-t from-fondo via-fondo/70 to-transparent"
         >
-          <p className="font-dancing text-2xl text-texto-claro">{texto}</p>
+          <p className="font-dancing text-2xl text-texto-claro">{overlayText}</p>
         </motion.div>
       )}
     </motion.div>

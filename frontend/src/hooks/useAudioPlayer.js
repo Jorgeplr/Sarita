@@ -8,6 +8,14 @@ export function useAudioPlayer(src, { loop = false, initialVolume = 0.5 } = {}) 
   const [duration, setDuration] = useState(0);
 
   useEffect(() => {
+    if (!src) {
+      audioRef.current = null;
+      setIsPlaying(false);
+      setProgress(0);
+      setDuration(0);
+      return;
+    }
+
     const audio = new Audio(src);
     audio.loop = loop;
     audio.volume = initialVolume;

@@ -5,13 +5,15 @@ Sitio web personal + backend con analytics y registro de respuesta.
 ```
 carta-genesis/
 ├── frontend/            ← React + Vite + Tailwind + Framer Motion
+├── frontend-admin/      ← Admin Panel (React + TS + Tailwind)
 ├── backend/             ← Bun + Hono + Drizzle + Postgres
-└── docker-compose.yml   ← orquesta los 3 servicios
+└── docker-compose.yml   ← orquesta los 4 servicios
 ```
 
 ## Stack
 
 - **Frontend:** Vite, React 19, Framer Motion, Tailwind CSS 3, nginx Alpine
+- **Admin:** Vite, React 19, React Router, TanStack Query, Tailwind, nginx Alpine
 - **Backend:** Bun 1.x, Hono, Drizzle ORM, Zod, pino, TypeScript
 - **DB:** Postgres 16 Alpine
 - **Deploy:** Dokploy con `docker-compose.yml`
@@ -29,6 +31,9 @@ carta-genesis/
    IP_HASH_SALT=$salt
    ADMIN_TOKEN=$token
    FRONTEND_ORIGIN=http://localhost
+   ADMIN_ORIGIN=http://localhost:8080
+   ADMIN_USERNAME=admin
+   ADMIN_PASSWORD=change-me-now
    "@ | Out-File -Encoding utf8 .env
    ```
 
@@ -38,7 +43,7 @@ carta-genesis/
    docker compose up -d --build
    ```
 
-3. Abre `http://localhost/`.
+3. Abre `http://localhost/` (carta) y `http://localhost:8080/` (admin).
 
 Guarda el `ADMIN_TOKEN` — lo necesitas para los endpoints `/api/admin/*`.
 
@@ -92,6 +97,9 @@ bun test                       # corre TODO (unit + integration)
 | POST | `/api/respuesta` | — | 5/min/IP | Registra respuesta (idempotente por `visitorUuid`) |
 | GET | `/api/admin/stats` | Bearer | — | Stats agregadas |
 | GET | `/api/admin/visits?limit=N&offset=M` | Bearer | — | Listado paginado |
+| POST | `/api/auth/login` | Session | — | Login admin (cookie) |
+| GET | `/api/auth/me` | Session | — | User actual |
+| POST | `/api/admin/cualidades` | Session | — | CRUD admin |
 
 Llamadas admin requieren `Authorization: Bearer <ADMIN_TOKEN>`.
 
@@ -106,8 +114,8 @@ Invoke-RestMethod http://localhost/api/admin/stats -Headers @{ Authorization = "
 
 1. Push del repo a Git.
 2. En Dokploy: **New Application → Docker Compose** → apunta al repo.
-3. En la UI de Dokploy, define las variables: `POSTGRES_PASSWORD`, `IP_HASH_SALT`, `ADMIN_TOKEN`, `FRONTEND_ORIGIN`.
-4. Asigna dominio al servicio `frontend`. Dokploy maneja TLS via Let's Encrypt.
+3. En la UI de Dokploy, define las variables: `POSTGRES_PASSWORD`, `IP_HASH_SALT`, `ADMIN_TOKEN`, `FRONTEND_ORIGIN`, `ADMIN_ORIGIN`, `ADMIN_USERNAME`, `ADMIN_PASSWORD`.
+4. Asigna dominio al servicio `frontend` y `frontend-admin`. Dokploy maneja TLS via Let's Encrypt.
 5. Deploy.
 
 ## Roadmap

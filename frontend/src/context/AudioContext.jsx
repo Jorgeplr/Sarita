@@ -1,20 +1,29 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useAudioPlayer } from "../hooks/useAudioPlayer";
 import { AudioCtx } from "./audio-context-object";
-
-const FONDO_SRC = "/assets/musica/fondo.mp3";
+import { useContent } from "../lib/useContent";
 
 export function AudioProvider({ children }) {
-  const fondo = useAudioPlayer(FONDO_SRC, { loop: true, initialVolume: 0 });
+  const { data: fondoData } = useContent("fondo");
+  const fondoSrc = fondoData?.url ?? null;
+  const fondo = useAudioPlayer(fondoSrc, { loop: true, initialVolume: 0 });
   const [muted, setMuted] = useState(false);
   const [iniciado, setIniciado] = useState(false);
 
   const iniciarFondo = useCallback(() => {
     if (iniciado) return;
     setIniciado(true);
+    if (fondoSrc) {
+      fondo.play();
+      fondo.fadeTo(0.3, 2000);
+    }
+  }, [iniciado, fondoSrc]);
+
+  useEffect(() => {
+    if (!iniciado || !fondoSrc) return;
     fondo.play();
     fondo.fadeTo(0.3, 2000);
-  }, [iniciado, fondo]);
+  }, [fondoSrc, iniciado]);
 
   const pausarFondoParaPlaylist = useCallback(() => {
     fondo.fadeTo(0, 1000);

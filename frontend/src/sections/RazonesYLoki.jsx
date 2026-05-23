@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { cualidades } from "../data/cualidades";
+import { useContent } from "../lib/useContent";
 import CualidadCard from "../components/CualidadCard";
 import ParticulasLoki from "../components/ParticulasLoki";
 
@@ -7,6 +7,9 @@ const CITA_LOKI =
   "Pero a diferencia de Loki, yo no quiero ser el villano de tu historia... quiero ser tu siempre.";
 
 export default function RazonesYLoki() {
+  const { data, loading } = useContent("cualidades");
+  const cualidades = Array.isArray(data) ? data : [];
+
   return (
     <>
       <section className="relative py-20 px-6">
@@ -21,9 +24,20 @@ export default function RazonesYLoki() {
         </motion.h2>
 
         <div className="space-y-6">
-          {cualidades.map((c, i) => (
-            <CualidadCard key={i} index={i} {...c} />
-          ))}
+          {loading && (
+            <div className="space-y-6">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="h-20 max-w-2xl mx-auto rounded-xl bg-verde-loki/30 animate-pulse"
+                />
+              ))}
+            </div>
+          )}
+          {!loading &&
+            cualidades.map((c, i) => (
+              <CualidadCard key={c.id ?? i} index={i} icon={c.icon} text={c.text} />
+            ))}
         </div>
       </section>
 

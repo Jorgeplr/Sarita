@@ -7,6 +7,9 @@ const envSchema = z.object({
   IP_HASH_SALT: z.string().min(32, "IP_HASH_SALT must be at least 32 characters"),
   ADMIN_TOKEN: z.string().min(32, "ADMIN_TOKEN must be at least 32 characters"),
   FRONTEND_ORIGIN: z.string().default("http://localhost"),
+  ADMIN_ORIGIN: z.string().default("http://localhost:8080"),
+  ADMIN_USERNAME: z.string().optional(),
+  ADMIN_PASSWORD: z.string().optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;

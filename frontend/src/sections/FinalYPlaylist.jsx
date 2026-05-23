@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
-import { playlist } from "../data/playlist";
+import { useContent } from "../lib/useContent";
 import ReproductorMusica from "../components/ReproductorMusica";
 import TulipanesFlotando from "../components/TulipanesFlotando";
 import { enviarRespuesta, getOrCreateVisitorUuid } from "../lib/api";
@@ -26,6 +26,8 @@ function generarExplosion() {
 export default function FinalYPlaylist() {
   const [revelado, setRevelado] = useState(false);
   const [explosion, setExplosion] = useState(null);
+  const { data, loading } = useContent("playlist");
+  const playlist = Array.isArray(data) ? data : [];
 
   const onRevelar = () => {
     enviarRespuesta(getOrCreateVisitorUuid());
@@ -95,7 +97,18 @@ export default function FinalYPlaylist() {
           <h3 className="font-cinzel text-2xl md:text-3xl text-dorado-loki mb-6">
             Nuestras canciones
           </h3>
-          <ReproductorMusica canciones={playlist} />
+          {loading ? (
+            <div className="space-y-4">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="h-20 rounded-xl bg-verde-loki/30 animate-pulse"
+                />
+              ))}
+            </div>
+          ) : (
+            <ReproductorMusica canciones={playlist} />
+          )}
         </div>
       </div>
     </section>
